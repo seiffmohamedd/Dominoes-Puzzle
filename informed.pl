@@ -55,6 +55,14 @@ getThingsReady(N , M , B1 , B2 ,Board , Solution):-
     %write(Ds),nl,
     solve(N,M,B1,B2,Board,Solution,Ds).
 
+checkMax(N,M,NewBoard,NewPossiblePlays):-
+    length(NewBoard,X),
+    length(NewPossiblePlays,Y),
+    Totalsize is X+Y,
+    EmptyCells is (M*N-2)/2,
+    floor(EmptyCells,EmptyCellsby2),
+    Totalsize >= EmptyCellsby2.
+
 
 solve(N, M, B1 , B2 , Board , Solution,PossiblePlays):- %board is database of dominos to not overlap
     getDomino(N,M,D),
@@ -62,8 +70,10 @@ solve(N, M, B1 , B2 , Board , Solution,PossiblePlays):- %board is database of do
     overlapcheckBoard(D,Board),
     append([D], Board, NewBoard),
     filterPossiblePlays(PossiblePlays,D,NewPossiblePlays),
+    checkMax(N,M,NewBoard,NewPossiblePlays),
     %write(PossiblePlays),nl,
     %write(NewPossiblePlays),nl,
+
     (NewPossiblePlays = [] -> (Solution = NewBoard,true) ; 
     solve(N,M,B1,B2,NewBoard,Solution,NewPossiblePlays)).
 
@@ -71,3 +81,4 @@ solve(N, M, B1 , B2 , Board , Solution,PossiblePlays):- %board is database of do
    % NewPossiblePlays = [],
    % length(NewPossiblePlays,0),
    % Solution = Board.
+
